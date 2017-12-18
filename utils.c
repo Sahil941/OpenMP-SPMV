@@ -1,7 +1,6 @@
 #include "utils.h"
 #include <stdio.h>
-#include <math.h>
-void getmul(const float* val, const float* vec, const int* rIndex, const int*cIndex, int nz, float* res)
+void getmul(const double* val, const double* vec, const int* rIndex, const int*cIndex, int nz, double* res)
 {
 	int i; 
 	for (i = 0; i < nz; i++)
@@ -12,19 +11,15 @@ void getmul(const float* val, const float* vec, const int* rIndex, const int*cIn
 	}
 }
 
-int checkerror(const float* resp, const float* ress, int dim)
+bool checkerror(const double* resp, const double* ress, int dim)
 {
 	int i;
 	for (i = 0; i < dim; i++)
 	{
-		if (fabs(( ((double)resp[i]) - ((double)ress[i]) )/((double)resp[i]) ) == 0){
-			return 1;
-		}
-		if (fabs(( ((double)resp[i]) - ((double)ress[i]) )/((double)resp[i]) ) > 1E-6){
-			return 0;
-		}
+		if (resp[i] != ress[i])
+			return false;
 	}
 
-	return 1;
+	return true;
 
 }

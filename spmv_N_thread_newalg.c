@@ -212,13 +212,20 @@ int main(int argc, char *argv[])
 	// are allowed to perform loop transformation, i.e., loop tiling,  and
 	// additional steps of preprocessing, i.e., load balancing, before this
 	// two-level nested loop. 
+	int chunk = 1000;
+	#pragma omp parallel num_threads(thread_num)
+	{
+	#pragma omp for private(j, tmp) schedule(dynamic, chunk)
 	for (i=0; i<M; i++)
 	{
+		double result = 0.0;
 		for (j = rsIndex[i]; j <= reIndex[i]; j++)
 		{
 		  tmp = cIndex[j];
-			res[i] += val[j] * vec[tmp];
+			result += val[j] * vec[tmp];
 		}
+		res[i] = result;
+	}
 	}
 	
 	

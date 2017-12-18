@@ -1,4 +1,4 @@
-/*
+﻿/*
 *********************************************
 *  314 Principles of Programming Languages  *
 *  Fall 2016                                *
@@ -31,11 +31,7 @@
 #include "mmio.h"
 #include <omp.h> 
 #include <sys/time.h>
-#include "spmv_atomic_kernel.h"
 #include "utils.h"
-
-// gpu kernal wrapper function
-extern void kernel_wrapper(int nnz, int *coord_row, int *coord_col, float *A, float *x, float *y);
 
 //sorting according to the index
 void quicksort(double* a, double* vindex, int* rindex, int* cindex, int n)
@@ -213,7 +209,18 @@ int main(int argc, char *argv[])
 	// You need to determine which loop is safe to be parallelized.
 	// You will also need to use correct parallelization parameters. Please use a
 	// static schedule for this parallelization stratey.
-	kernel_wrapper(thread_num, rsIndex, cIndex, val, vec, res);
+	#pragma omp parallel num_threads(thread_num)
+	{
+	#pragma omp for private(j, i, tmp) schedule(static)
+	for (i=0; i<M; i++)
+	{
+		for (j = rsIndex[i]; j <= reIndex[i]; j++)
+		{
+		  tmp = cIndex[j];
+			res[i] += val[j] * vec[tmp];
+		}
+	}
+	}
 	
 	
 

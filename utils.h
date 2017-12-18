@@ -5,9 +5,12 @@ typedef struct{
 	time_t tv_sec; /* seconds */
 	long tv_nsec; /* nanoseconds */
 }timespect;
-
-int checkerror(const float *resp, const float *ress, int dim);
-void getmul(const float *val, const float *vec, const int *rIndex,
-	const int *cIndex, int nz, float *res);
+typedef enum
+{
+  true = 1, false = 0
+}bool;
+bool checkerror(const double *resp, const double *ress, int dim);
+void getmul(const double *val, const double *vec, const int *rIndex,
+	const int *cIndex, int nz, double *res);
 
 #endif

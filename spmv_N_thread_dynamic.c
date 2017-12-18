@@ -209,6 +209,9 @@ int main(int argc, char *argv[])
 	// You need to determine which loop is safe to be parallelized.
 	// You will also need to use correct parallelization parameters. Please use a
 	// dynamic schedule for this parallelization stratey.
+	#pragma omp parallel num_threads(thread_num)
+	{
+	#pragma omp for private(j, i, tmp) schedule(dynamic)
 	for (i=0; i<M; i++)
 	{
 		for (j = rsIndex[i]; j <= reIndex[i]; j++)
@@ -216,6 +219,7 @@ int main(int argc, char *argv[])
 		  tmp = cIndex[j];
 			res[i] += val[j] * vec[tmp];
 		}
+	}
 	}
 	
 	
